@@ -22,14 +22,16 @@ var preDorian = ee.ImageCollection('COPERNICUS/S1_GRD')
   .filterBounds(geometry)
   .filterDate('2019-07-22', '2019-07-28')
   .filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VV'))
+ 
+var preDorRed = preDorian.reduce(ee.Reducer.median());
   ```
  
  Typically more analysis would be done in GEE before R, in order to harness the power of the remote server, but for the scope of this course I will be doing the bulk of my processing in R.
  
  Now that I have pulled my desired images, I need to export them to Google Drive. This is a pretty "cookie cutter" operation and is done below.
  ```javascript
- Export.image.toDrive({
-  image:preDorian.first().toFloat(),
+Export.image.toDrive({
+  image:preDorRed.toDouble(),
   description:'preDorian',
   scale:30,
   region:geometry
@@ -40,9 +42,9 @@ var preDorian = ee.ImageCollection('COPERNICUS/S1_GRD')
 Now that we have the Google Earth Engine processing out of the way, we shoud be in familiar territory. We will pull the 3 images using Git Bash. Note that the folder in your drive has to be public to access these files.
 
 ```bash
-wget --no-check-certificate 'https://drive.google.com/file/d/1sl8qWpzRLfXEw1o-oIACFIZElorzRrzd/view?usp=sharing' -O Dorian.tif
-wget --no-check-certificate 'https://drive.google.com/file/d/1sl8qWpzRLfXEw1o-oIACFIZElorzRrzd/view?usp=sharing' -O preDorian.tif
-wget --no-check-certificate 'https://drive.google.com/file/d/1sl8qWpzRLfXEw1o-oIACFIZElorzRrzd/view?usp=sharing' -O postDorian.tif
+wget --no-check-certificate 'https://drive.google.com/open?id=1lo8C48inc7SUlvyM-3Sknk_U4tKztOxW' -O Dorian.tif
+wget --no-check-certificate 'https://drive.google.com/open?id=18JjjGPFXY87A1SXHPJz72T1UDS7Pu-hC' -O preDorian.tif
+wget --no-check-certificate 'https://drive.google.com/open?id=1Gy4sAljc4c-6gEnZKyEbIwO3bgByhs96' -O postDorian.tif
 ```
 
 ### Working in R
