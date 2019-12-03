@@ -48,11 +48,50 @@ wget --no-check-certificate 'https://drive.google.com/open?id=1Gy4sAljc4c-6gEnZK
 ```
 
 ### Working in R
-Now we can start working in R. Note that unlike in prior mapping lessons, we will be working with raster format, specifically a .tif. Additionally, geospatial objects are often subject to rigorous reprojection and transformation during analysis. GDAL, or Geospatial Data Abstraction Library, is used on the back-end of most programs to ensure correct formatting. This can all be done with the packages 'raster' and 'rgdal'.
+Now we can start working in R. Note that unlike in prior mapping lessons, we will be working with raster format, specifically a .tif. Additionally, geospatial objects are often subject to rigorous reprojection and transformation during analysis. GDAL, or Geospatial Data Abstraction Library, is used on the back-end of most programs to ensure correct formatting. This can all be done with the packages 'raster' and 'rgdal'. The package 'sf' will also be needed to work with shapefiles.
 
 ```R
 library(raster)
 library(rgdal)
+library(sf)
+```
+
+Now let's load in the rasters.
+
+```R
+pre <- raster("preDorian.tif")
+during <- raster("Dorian.tif")
+post <- raster("postDorian.tif")
+```
+
+We can do some basic cell statistics to familiarize ourselves with the data that we are working with.
+```R
+cellStats(post, min)
+cellStats(post, mean)
+cellStats(post, max)
+cellStats(post, range)
+```
+
+Now we can plot the imagery. A title can be added as "main."
+```R
+plot(pre, main = "Pre Dorian SAR Imagery")
+```
+
+We have successfully mapped the image, but since this is an island there is a lot of water around the landform that we do not want to account for when considering flood inundation. Let's try loading in a shapefile of the landmass so that we can mask the raster. When using this shapefile, we want to be mindful and it has the same projection as the raster.
+```R
+nassau <- st_read("new_providence.shp")
+crs(post)
+crs(nassau)
+```
+
+Now, we want to use the "R equivalent" of the extract by mask function. We can use this with R's function, "mask." Plotting these new masked areas, you can see that our study area is much more relevant and focused.
+```R
+pre_masked <- mask(x = pre, mask = nassau)
+during_masked <- mask(x = during, mask = nassau)
+post_masked <- mask(x = during, mask = nassau)
+plot(pre_masked, main = "Pre Dorian SAR Imagery")
+plot(during_masked, main = "During Dorian SAR Imagery")
+plot(post_masked, main = "Post Dorian SAR Imagery")
 ```
 
 
