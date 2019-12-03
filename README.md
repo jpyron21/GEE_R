@@ -44,3 +44,13 @@ wget --no-check-certificate 'https://drive.google.com/file/d/1sl8qWpzRLfXEw1o-oI
 wget --no-check-certificate 'https://drive.google.com/file/d/1sl8qWpzRLfXEw1o-oIACFIZElorzRrzd/view?usp=sharing' -O preDorian.tif
 wget --no-check-certificate 'https://drive.google.com/file/d/1sl8qWpzRLfXEw1o-oIACFIZElorzRrzd/view?usp=sharing' -O postDorian.tif
 ```
+
+### Working in R
+Now we can start working in R. Note that unlike in prior mapping lessons, we will be working with raster format, specifically a .tif. Additionally, geospatial objects are often subject to rigorous reprojection and transformation during analysis. GDAL, or Geospatial Data Abstraction Library, is used on the back-end of most programs to ensure correct formatting. This can all be done with the packages 'raster' and 'rgdal'.
+
+```R
+library(raster)
+library(rgdal)
+```
+
+
